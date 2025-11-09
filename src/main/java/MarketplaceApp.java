@@ -7,6 +7,7 @@ import service.ProductService;
 import service.UserService;
 
 public class MarketplaceApp {
+
     public static void main(String[] args) {
         ProductRepository productRepository = new ProductRepositoryImpl();
         UserRepository userRepository = new UserRepositoryImpl();
