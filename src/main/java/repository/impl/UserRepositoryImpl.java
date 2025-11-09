@@ -5,42 +5,31 @@ import repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    Map<String, User>  users = new HashMap<>();
+    Map<String, User> users = new HashMap<>();
 
     @Override
     public void createUser(User user) {
         if (users.containsKey(user.getUsername())) {
             throw new IllegalArgumentException("Такой пользователь уже существует");
-        } else {
-            users.put(user.getUsername(), user);
         }
+        users.put(user.getUsername(), user);
     }
 
     @Override
     public void updateUser(User user) {
-        if (users.containsKey(user.getUsername())) {
-            users.put(user.getUsername(), user);
-        } else {
+        if (!users.containsKey(user.getUsername())) {
             throw new IllegalArgumentException("Данного пользователя не существует");
         }
+        users.put(user.getUsername(), user);
     }
 
     @Override
-    public void deleteUser(User user) {
-        if (users.containsKey(user.getUsername())) {
-            users.remove(user.getUsername());
-        }
+    public Optional<User> getuser(String username) {
+        return Optional.ofNullable(users.get(username));
     }
 
-    @Override
-    public User getuser(String username) {
-        if (users.containsKey(username)) {
-            return users.get(username);
-        } else {
-            throw new IllegalArgumentException("Данного пользователя не существует");
-        }
-    }
 }

@@ -3,31 +3,29 @@ package repository.impl;
 import model.Product;
 import repository.ProductRepository;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProductRepositoryImpl implements ProductRepository {
 
-    Map<String, Product> products = new HashMap<>();
+    private final Map<String, Product> products = new HashMap<>();
+
+    public ProductRepositoryImpl() {
+    }
 
     @Override
     public void createProduct(Product product) {
         if (products.containsKey(product.getName())) {
             throw new IllegalArgumentException("Данный товар уже существует");
-        } else {
-            products.put(product.getName(), product);
         }
+        products.put(product.getName(), product);
     }
 
     @Override
     public void updateProduct(Product product) {
-        if (products.containsKey(product.getName())) {
-            products.put(product.getName(), product);
-        } else {
+        if (!products.containsKey(product.getName())) {
             throw new IllegalArgumentException("Такого товара не существует");
         }
+        products.put(product.getName(), product);
     }
 
     @Override
@@ -36,16 +34,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product getProduct(String productName) {
-        if (products.containsKey(productName)) {
-            return products.get(productName);
-        } else {
-            throw new IllegalArgumentException("Такого товара не существует");
-        }
+    public Optional<Product> getProduct(String productName) {
+        return Optional.ofNullable(products.get(productName));
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return products.values().stream().toList();
+        return new ArrayList<>(products.values());
     }
+
 }
